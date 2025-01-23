@@ -1,0 +1,11 @@
+# Utilise une image Node.js légère
+FROM node:18-alpine
+
+# Définit le dossier de travail
+WORKDIR /app
+
+# Installe Sass globalement
+RUN npm install -g sass
+
+# Commande par défaut pour surveiller les fichiers Sass
+CMD ["sass", "--watch", "/app/styles.scss:/app/styles.css"]
