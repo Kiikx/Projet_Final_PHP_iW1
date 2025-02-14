@@ -6,7 +6,7 @@ require_once __DIR__ . "/controllers/LoginController.php";
 require_once __DIR__ . "/controllers/RegisterController.php";
 require_once __DIR__ . "/controllers/ArticleController.php";
 
-// $router = new Router();
+$router = new Router();
 
 // $router->get("/login", LoginController::class, "index");
 // $router->post("/login", LoginController::class, "post");
@@ -18,6 +18,14 @@ require_once __DIR__ . "/controllers/ArticleController.php";
 // $router->get("/register", RegisterController::class, "index");
 
 
-// $router->start();
+
+$router->get("/register", RegisterController::class, "index");
+$router->post("/register", RegisterController::class, "post");
+
+$router->get("/login", LoginController::class, "index");
+$router->post("/login", LoginController::class, "post");
+
+
+$router->start();
 
 require_once __DIR__ . "/core/QueryBuilder.php";

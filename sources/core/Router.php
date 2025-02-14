@@ -45,7 +45,13 @@ class Router
                   $methodName = $route["methodName"];
 
                   echo("<pre>");
-                  $controllerName::$methodName($matches["slug"]);
+                  
+                  if (isset($matches["slug"])) {
+                    $controllerName::$methodName($matches["slug"]);
+                    } else {
+                        $controllerName::$methodName();
+                    }
+                
                   return;
               }
           }
