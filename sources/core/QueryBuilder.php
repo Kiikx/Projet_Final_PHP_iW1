@@ -1,63 +1,118 @@
 <?php
-
-// TODO: utiliser prepare au lieu de query !!!
-
 class QueryBuilder
 {
-  private string $sql;
+    private string $table;          // Nom de la table
+    private array $fields = [];     // Colonnes sélectionnées ou à modifier
+    private array $conditions = []; // Clauses WHERE
+    private array $bindings = [];   // Valeurs des paramètres pour requêtes préparées
 
-  public function __construct()
-  {
-    $this->sql = "";
-  }
+    private PDO $pdo;               // Instance PDO pour exécuter les requêtes
 
-  public function select(array $columns)
-  {
-    $this->sql = $this->sql . "SELECT " . implode(", ", $columns);
+    public function __construct(PDO $pdo, string $table)
+    {
+        $this->pdo = $pdo;
+        $this->table = $table;
+    }
 
-    return $this;
-  }
+    // SELECT
+    public function select(array $fields = ['*']): self
+    {
+        $this->fields = $fields;
+        return $this;
+    }
 
-  public function from(string $tableName)
-  {
-    $this->sql = $this->sql . " FROM " . $tableName;
+    // WHERE
+    public function where(string $field, string $operator, $value): self
+    {
+        $this->conditions[] = "$field $operator ?";
+        $this->bindings[] = $value;
+        return $this;
+    }
+    //OR WHERE
+    public function orWhere(string $field, string $operator, $value): self
+    {
+        if (!empty($this->conditions)) {
+            $this->conditions[] = "OR $field $operator ?";
+        } else {
+            $this->conditions[] = "$field $operator ?";
+        }
+        $this->bindings[] = $value;
+        return $this;
+    }
 
-    return $this;
-  }
+    // INSERT
+    public function insert(array $data): bool
+    {
+        $fields = implode(', ', array_keys($data));
+        $placeholders = implode(', ', array_fill(0, count($data), '?'));
 
-  public function where(string $columnName, string $columnValue)
-  {
-    $this->sql = $this->sql . " WHERE " . $columnName . " = " . $columnValue;
+        $sql = "INSERT INTO {$this->table} ($fields) VALUES ($placeholders)";
+        $this->bindings = array_values($data);
 
-    return $this;
-  }
+        return $this->execute($sql);
+    }
 
-  public function fetch()
-  {
-    $databaseConnection = new PDO(
-      "mysql:host=mariadb;dbname=database",
-      "user",
-      "password"
-    );
+    // UPDATE
+    public function update(array $data): bool
+    {
+        $updates = [];
+        $bindings = [];
+    
+        foreach ($data as $field => $value) {
+            $updates[] = "$field = ?";
+            $bindings[] = $value;
+        }
+    
+        $sql = "UPDATE {$this->table} SET " . implode(', ', $updates);
+    
+        if (!empty($this->conditions)) {
+            $sql .= " WHERE (" . implode(' ', $this->conditions) . ")";
+        }
+    
+        $this->bindings = array_merge($bindings, $this->bindings);
+    
+        return $this->execute($sql);
+    }
 
-    $query = $databaseConnection->query($this->sql);
+    // DELETE
+    public function delete(): bool
+    {
+        $sql = "DELETE FROM {$this->table}";
 
-    $result = $query->fetch(PDO::FETCH_ASSOC);
+        if (!empty($this->conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $this->conditions);
+        }
 
-    return $result;
-  }
+        return $this->execute($sql);
+    }
 
-  public function fetchAll() {}
+    // Générer une requête SELECT
+    public function get(): array
+    {
+        $fields = implode(', ', $this->fields);
+        $sql = "SELECT $fields FROM {$this->table}";
 
-  public function execute() {}
+        if (!empty($this->conditions)) {
+            $sql .= " WHERE " . implode(' AND ', $this->conditions);
+        }
+
+        return $this->fetchAll($sql);
+    }
+
+    // Exécuter une requête avec des bindings
+    private function execute(string $sql): bool
+    {
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($this->bindings);
+    }
+
+    // Récupérer les résultats (fetchAll)
+    private function fetchAll(string $sql): array
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($this->bindings);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
-$queryBuilder = new QueryBuilder();
 
-$email = "anairi@esgi.fr";
-
-$queryBuilder
-  ->select(["id", "password", "email"])
-  ->from("users")
-  ->where("email", $email)
-  ->fetch();
