@@ -9,6 +9,7 @@
     <h2>Publiez votre PIPIcs</h2>
     <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="image" required>
+        <p>jpeg, png, gif, webp jusqu'à 2MB</p>
         <button type="submit">Envoyer</button>
     </form>
 </body>
