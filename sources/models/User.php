@@ -57,5 +57,18 @@ class User
             "email" => $data["email"],
             "password" => $data["password"]
         ]);
+    } 
+
+    // Mettre a jour le mot de passe
+    public static function updatePassword(int $user_id, string $password): void
+    {
+
+    $pdo = Database::getConnection();
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :id");
+    $stmt->execute(["password" => $hashedPassword, "id" => $user_id]);
+
     }
+
 }

@@ -32,35 +32,39 @@ class Router
   public function start(): void
   {
       $method = $_SERVER["REQUEST_METHOD"];
-      $path = $_SERVER["REQUEST_URI"];
-
+      $fullUrl = $_SERVER["REQUEST_URI"];
+      
+      
+      $urlParts = parse_url($fullUrl);
+      $path = $urlParts["path"]; 
+      parse_str($urlParts["query"] ?? "", $_GET); 
+  
       foreach ($this->routes as $route) {
           if ($method === $route["method"]) {
               $routePath = $route["path"];
               $regex = $this->convertPathToRegex($routePath);
+  
               if (preg_match($regex, $path, $matches)) {
-                  array_shift($matches); // Remove the full match
-                  
+                  array_shift($matches);
+  
                   $controllerName = $route["controllerName"];
                   $methodName = $route["methodName"];
-
-                  echo("<pre>");
-                  
-                  if (isset($matches["slug"])) {
-                    $controllerName::$methodName($matches["slug"]);
-                    } else {
-                        $controllerName::$methodName();
-                    }
-                
+  
+                  if (!empty($matches)) {
+                      call_user_func_array([$controllerName, $methodName], $matches);
+                  } else {
+                      $controllerName::$methodName();
+                  }
                   return;
               }
           }
       }
-
-      // If no route matches, return a 404
+  
+      // Si aucune route ne correspond, afficher une 404
       http_response_code(404);
       echo "404 Not Found";
   }
+  
 
   private function convertPathToRegex(string $path): string
   {
