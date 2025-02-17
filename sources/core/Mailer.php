@@ -2,10 +2,22 @@
 
 class Mailer
 {
-    private static string $apiKey = "re_ijt5Bh2L_9icHJQKPCYosSxznYUThvrun"; // Remplacez par votre clé API
+    private static string $apiKey; // Remplacez par votre clé API
+
+        // Initialiser l'API Key depuis .env
+        public static function init()
+        {
+            if (getenv('RESEND_API_KEY')) {
+                self::$apiKey = getenv('RESEND_API_KEY');
+            } else {
+                die("❌ ERREUR : RESEND_API_KEY non défini dans .env");
+            }
+        }
 
     public static function sendEmail(string $to, string $subject, string $htmlContent): bool
     {
+        self::init();
+
         $url = "https://api.resend.com/emails";
 
         $data = [
