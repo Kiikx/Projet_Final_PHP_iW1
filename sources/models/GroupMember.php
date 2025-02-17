@@ -33,6 +33,14 @@ class GroupMember
     return $stmt->fetchColumn() > 1;
 }
 
+public static function getRole($userId, $groupId)
+{
+    $pdo = Database::getConnection();
+    $stmt = $pdo->prepare("SELECT role FROM group_members WHERE group_id = :group_id AND user_id = :user_id");
+    $stmt->execute(['group_id' => $groupId, 'user_id' => $userId]);
+    return $stmt->fetchColumn();
+}
+
 public static function updateRole($groupId, $userId, $newRole)
 {
     $pdo = Database::getConnection();

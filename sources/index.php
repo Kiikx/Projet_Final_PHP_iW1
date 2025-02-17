@@ -39,6 +39,7 @@ $router->post("/password/reset", PasswordController::class, "reset");
 // PHOTOS
 $router->get("/upload", UploadController::class, "index"); 
 $router->post("/upload", UploadController::class, "post"); 
+$router->post("/photo/delete", UploadController::class, "deletePhoto");
 
 // GROUPS
 $router->post("/group/create", GroupController::class, "create");
