@@ -1,15 +1,18 @@
 {
-  "name": "sources",
+  "name": "projet-integration-web",
   "version": "1.0.0",
-  "main": "vite.config.js",
+  "description": "Partie front-end du projet S1",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "sass": "^1.83.4"
+    "sass": "^1.62.1",
+    "vite": "^5.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^3.2.0"
   }
 }
