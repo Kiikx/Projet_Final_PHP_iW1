@@ -9,9 +9,9 @@ class Database
         if (self::$pdo === null) {
             try {
                 self::$pdo = new PDO(
-                    "mysql:host=mariadb;dbname=database;charset=utf8",
-                    "user",
-                    "password",
+                    "mysql:host=mariadb;dbname=" . getenv("DATABASE_NAME") . ";charset=utf8",
+                    getenv("DATABASE_USER"),
+                    getenv("DATABASE_PASSWORD"),
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
