@@ -38,6 +38,7 @@ services:
     user: php
     volumes:
       - ./sources:$PHP_USER_HOME_DIRECTORY
+      - ./db:$PHP_USER_HOME_DIRECTORY/db
 
 
   migration:
@@ -90,3 +91,15 @@ services:
     volumes:
       - ./sources:/app
     command: sass --watch ./src/scss/main.scss ./dist/css/main.css
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mariadb
+      MYSQL_ROOT_PASSWORD: $DATABASE_ROOT_PASSWORD
+    ports:
+      - "8080:80"
+    depends_on:
+      - mariadb
