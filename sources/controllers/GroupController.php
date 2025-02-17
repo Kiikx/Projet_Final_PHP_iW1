@@ -45,11 +45,27 @@ class GroupController
             die("❌ Vous n'avez pas le droit de supprimer ce groupe.");
         }
 
+        $photos = Photo::getByGroup($groupId);
+        foreach ($photos as $photo) {
+            $filePath = __DIR__ . "/../uploads/group_{$groupId}/{$photo['filename']}";
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            Photo::delete($photo['id']);
+        }
+    
+        // 🔥 Supprimer le dossier du groupe s’il est vide
+        $uploadDir = __DIR__ . "/../uploads/group_{$groupId}/";
+        if (is_dir($uploadDir)) {
+            rmdir($uploadDir);
+        }
+
         if (Group::delete($groupId)) {
             echo "✅ Groupe supprimé.";
         } else {
             die("❌ Erreur lors de la suppression.");
         }
+
     }
 
     /**
@@ -101,7 +117,7 @@ class GroupController
         if (!GroupMember::isMember($userId, $groupId)) {
             die("❌ Cet utilisateur n'est pas dans le groupe.");
         }
-        
+
         // Vérifier si l'utilisateur retiré est un owner
         $isOwner = Group::isOwner($userId, $groupId);
         
