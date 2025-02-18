@@ -35,7 +35,9 @@ class PasswordController
                 ]);
 
                 // Générer le lien de réinitialisation
-                $resetLink = "http://localhost:8000/password/reset?token=$token";
+                $baseUrl = getenv("BASE_URL") ?: "http://localhost:8000";
+                $resetLink = "$baseUrl/password/reset?token=$token";
+                // $resetLink = "http://localhost:8000/password/reset?token=$token";
 
                 // Construire l'email en HTML
                 $emailContent = "

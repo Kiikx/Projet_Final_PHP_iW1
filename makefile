@@ -1,15 +1,42 @@
-.PHONY: build start stop restart database
+.PHONY: up down restart logs migrate db-shell reset-db
 
+# Construire les conteneurs
 build:
 	docker-compose build
 
-start: build
-	docker compose up --detach
+# Démarrer les conteneurs
+up:
+	docker-compose up -d
 
-stop:
-	docker-compose down --remove-orphans --volumes --timeout 0
+# Arrêter les conteneurs
+down:
+	docker-compose down
 
-database:
-	docker compose exec mariadb sh -c 'mysql --user=$$DATABASE_USER --password=$$DATABASE_PASSWORD $$DATABASE_NAME'
+# Redémarrer les conteneurs
+restart: down up
 
-restart: stop start
+# Voir les logs
+logs:
+	docker-compose logs -f
+
+# Appliquer les migrations
+migrate:
+	docker-compose exec php php db/migrate.php
+
+
+# Rollback des migrations
+rollback:
+	docker-compose exec php php db/rollback.php
+
+# Rollback de toutes les migrations
+rollback-all:
+	docker-compose exec php php db/rollback.php 9999
+
+# Accéder au shell MySQL (via le conteneur)
+db-shell:
+	docker-compose exec mariadb mysql -uuser -ppassword database
+
+# Réinitialiser la BDD (⚠️ supprime toutes les données !)
+reset-db: down
+	rm -rf database
+	docker-compose up -d
