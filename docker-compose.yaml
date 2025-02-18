@@ -40,7 +40,6 @@ services:
       - ./sources:$PHP_USER_HOME_DIRECTORY
       - ./db:$PHP_USER_HOME_DIRECTORY/db
 
-
   migration:
     container_name: migration
     restart: unless-stopped
@@ -90,8 +89,8 @@ services:
     working_dir: /app
     volumes:
       - ./sources:/app
-    command: sass --watch ./src/scss/main.scss ./dist/css/main.css
-
+    command: sass --watch ./src/scss/main.scss ./dist/css/main.css --poll
+    
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
