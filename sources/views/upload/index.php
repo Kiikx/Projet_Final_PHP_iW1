@@ -6,6 +6,7 @@
     <title>Upload d'image</title>
 </head>
 <body>
+
     <h2>Upload une image</h2>
     
     <form action="/upload" method="POST" enctype="multipart/form-data">

@@ -5,7 +5,7 @@ class HomeController
     public static function index(): void
     {
 
-        $pageTitle = "Accueil";
+        $pageTitle = "Tripipics";
         $user = null;
     
         if (isset($_SESSION["user_id"])) {

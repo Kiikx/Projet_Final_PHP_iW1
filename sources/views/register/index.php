@@ -10,7 +10,6 @@
 
 <body>
 
-
     <form class="form" method="POST" action="/register">
 
         <h2>Inscription</h2>
