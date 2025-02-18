@@ -34,6 +34,15 @@ class LoginController
         $_SESSION["user_id"] = $user->id;
         $_SESSION["username"] = $user->username;
 
-        echo "Connexion réussie !";
+        header("Location: /");
+        exit;
+    }
+
+    public static function logout(): void
+    {
+        session_destroy();
+
+        header("Location: /"); // ✅ Redirige après déconnexion
+        exit;
     }
 }

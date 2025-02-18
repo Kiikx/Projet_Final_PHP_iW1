@@ -2,6 +2,7 @@
 
 require_once __DIR__ . "/core/Router.php";
 
+require_once __DIR__ . "/controllers/HomeController.php";
 require_once __DIR__ . "/controllers/LoginController.php";
 require_once __DIR__ . "/controllers/RegisterController.php";
 require_once __DIR__ . "/controllers/ArticleController.php";
@@ -10,16 +11,8 @@ require_once __DIR__ . "/controllers/PasswordController.php";
 require_once __DIR__ . "/controllers/GroupController.php";
 
 $router = new Router();
-
-// $router->get("/login", LoginController::class, "index");
-// $router->post("/login", LoginController::class, "post");
-
-// $router->get("/articles/add/{slug}", ArticleController::class, "index");
-
-// $router->get("/articles/{slug}", ArticleController::class, "index");
-
-// $router->get("/register", RegisterController::class, "index");
-
+// HOME
+$router->get("/", HomeController::class, "index");
 
 // USERS
 $router->get("/register", RegisterController::class, "index");
@@ -34,6 +27,8 @@ $router->post("/password/forgot", PasswordController::class, "forgot");
 
 $router->get("/password/reset", PasswordController::class, "reset");
 $router->post("/password/reset", PasswordController::class, "reset");
+
+$router->get("/logout", LoginController::class, "logout");
 
 
 // PHOTOS
