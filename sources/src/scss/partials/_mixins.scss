@@ -1,3 +1,4 @@
+@use "./variables" as v;
 @mixin resetA {
 	text-decoration: none;
 	color: inherit;
@@ -40,3 +41,19 @@
 		flex-wrap: $wrap;
 	}
 }
+
+@mixin button-style($bg-color, $hover-color) {
+    background: $bg-color;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+
+    &:hover {
+        background: $hover-color;
+    }
+}
+

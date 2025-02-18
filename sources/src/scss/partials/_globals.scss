@@ -45,4 +45,19 @@
 		border: solid thin currentColor;
 		//background-color: var(--input-bg-color);
 	}
+
+	input {
+		font-family: inherit;
+		font-size: v.$font-size-base;
+	}
+	
+	a {
+		text-decoration: none;
+		color: v.$primary-color;
+	
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	
 }
