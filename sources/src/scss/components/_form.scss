@@ -1,0 +1,93 @@
+@use '../partials/variables' as *;
+@use '../partials/mixins' as *;
+@use '../partials/functions' as f;
+
+.form {
+    background: $container-bg;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    text-align: center;
+    width: 90%;
+    max-width: f.rem(480);
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    h1 {
+        font-size: 2rem;
+        color: $text-color;
+        margin-bottom: 1rem;
+    }
+
+    &__error-message {
+        color: map-get($colors,"red");
+        font-size: 1rem;
+    }
+
+    &__sucess-message {
+        color: map-get($colors,"green");
+        font-size: 1rem;
+    }
+
+    label {
+        display: block;
+        font-size: 1rem;
+        text-align: left;
+    }
+
+    &__input-wrapper {
+        display: flex;
+        align-items: center;
+        background: white;
+        border: f.rem(1) solid $input-border;
+        border-radius: $border-radius-small;
+        padding: 0.75rem;
+        overflow: hidden;
+        width: 100%;
+    
+        .icon {
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+    
+        input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 1rem;
+            padding: 0.75rem;
+            width: 100%;
+            min-width: 0;
+        }
+    }
+    
+
+    a {
+        color: $primary-color;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    button {
+        @include button-style($primary-color, $secondary-color);
+        width: 100%;
+        padding: 1rem;
+    }
+
+    @media (min-width: map-get($breakpoints,sm)) {
+        width: 85%;
+        max-width: f.rem(500);
+    }
+
+    @media (min-width: map-get($breakpoints,md)) {
+        width: 70%;
+        max-width: f.rem(550);
+    }
+
+    @media (min-width: map-get($breakpoints,lg)) {
+        width: 60%;
+        max-width: f.rem(600);
+    }
+}

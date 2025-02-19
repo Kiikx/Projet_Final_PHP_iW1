@@ -45,4 +45,13 @@
 			border-color: var(--#{$name});
 		}
 	}
+
+	.text-center {
+		text-align: center;
+	}
+	
+	.mt-small {
+		margin-top: v.$spacing-small;
+	}
+	
 }

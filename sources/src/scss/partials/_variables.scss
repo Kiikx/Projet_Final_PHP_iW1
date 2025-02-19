@@ -2,6 +2,35 @@
 @use "sass:map";
 @use "sass:color" as color;
 
+// Couleurs
+$container-bg: #f0f0f0;
+$text-color: #333;
+$primary-color: #4CAF50;
+$secondary-color: #45a049;
+$input-border: #ccc;
+
+// Espacements (convertis en rem)
+$spacing-medium: 1.25rem;
+$spacing-small: 0.625rem;
+$spacing-xsmall: 0.3125rem;
+
+// Bordures et ombrages
+$border-radius: 0.625rem;
+$border-radius-small: 0.3125rem;
+$box-shadow: 0rem 0.25rem 0.375rem rgba(0, 0, 0, 0.1);
+
+// Tailles de police
+$font-size-large: 1.5rem;
+$font-size-small: 0.875rem;
+$font-size-base: 1rem;
+
+// Largeurs max pour le responsive
+$max-width-mobile: 90%;
+$max-width-tablet: 70%;
+$max-width-desktop: 60%;
+
+
+
 $colors: (
 	"red": #dc3545,
 	"grey": #6c757d,
