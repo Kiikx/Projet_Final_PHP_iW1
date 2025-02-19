@@ -11,9 +11,6 @@ class GroupController
     {
         $errors = [];
 
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             die("❌ Vous devez être connecté pour créer un groupe.");
@@ -39,10 +36,6 @@ class GroupController
      */
     public static function delete($groupId)
     {
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -78,9 +71,6 @@ class GroupController
      */
     public static function update($groupId)
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -107,7 +97,6 @@ class GroupController
      */
     public static function addMember($groupId)
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -151,7 +140,6 @@ class GroupController
      */
     public static function removeMember()
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -185,7 +173,6 @@ class GroupController
 
     public static function leaveGroup($groupId)
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -218,7 +205,6 @@ class GroupController
 
     public static function changeRole()
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
@@ -249,10 +235,6 @@ class GroupController
     }
     public static function index()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté pour voir les groupes.");
         }
@@ -266,9 +248,6 @@ class GroupController
 
     public static function show($groupId)
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
 
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");

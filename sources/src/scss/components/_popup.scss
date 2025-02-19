@@ -15,7 +15,9 @@
     justify-content: center;
     align-items: center;
 
-
+    &--open {
+        display: flex;
+    }
 
     &--content {
         background: white;
