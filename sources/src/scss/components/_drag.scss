@@ -1,0 +1,79 @@
+@use "../partials/variables" as v;
+@use "sass:map";
+@use "sass:color";
+
+// Définition des layers
+@layer components {
+    body {
+        margin: 2rem;
+    }
+
+    .title {
+        text-align: right;
+    }
+
+    .drag-uploader {
+        &__drop-area {
+            border: 3px dashed map.get(v.$colors, "green");
+            border-radius: 0.625rem;
+            padding: 2rem;
+            text-align: center;
+            background-color: map.get(v.$colors, "white");
+            transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+            margin: 2rem 0;
+
+            // Modificateur pour le survol ou le drop
+            &--highlight {
+                $green: map.get(v.$colors, "neutral");
+                border-color: $green;
+            }
+        }
+
+        &__label {
+            cursor: pointer;
+            color: map.get(v.$colors, "green");
+            text-decoration: underline;
+
+            &:hover {
+                $blue: map.get(v.$colors, "blue");
+                color: color.scale($blue, $lightness: 10%);
+            }
+        }
+
+        &__file-input {
+            display: none;
+        }
+
+        &__preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.625rem;
+
+            img {
+                max-width: 6.25rem;
+                max-height: 6.25rem;
+                border-radius: 0.625rem;
+                border: 1px solid map.get(v.$colors, "grey");
+                box-shadow: 0px 2px 4px map.get(v.$colors, "shadow-color");
+            }
+        }
+    }
+}
+
+// Ajout de styles adaptatifs (media queries)
+@media (max-width: map.get(v.$breakpoints, "md")) {
+    @layer components {
+        .drag-uploader__drop-area {
+            padding: 1rem;
+        }
+
+        .drag-uploader__preview-container {
+            gap: 0.5rem;
+
+            img {
+                max-width: 5rem;
+                max-height: 5rem;
+            }
+        }
+    }
+}

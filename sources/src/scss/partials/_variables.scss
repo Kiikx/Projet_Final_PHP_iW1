@@ -1,6 +1,6 @@
 // Colors
-
-@use "sass:color";
+@use "sass:map";
+@use "sass:color" as color;
 
 $colors: (
 	"red": #dc3545,
@@ -16,7 +16,6 @@ $colors: (
 	"accent": #dc3545,
 	"text-color": #3f3f46,
 	"shadow-color": rgba(0, 0, 0, 0.1),
-	// pour l'exo...
 	"neutral": #f8f9fa,
 );
 
