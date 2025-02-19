@@ -397,12 +397,14 @@
   .border-neutral {
     border-color: var(--neutral);
   }
+
   .text-center {
     text-align: center;
   }
   .mt-small {
     margin-top: 0.625rem;
   }
+
 }
 @layer base {
   :root {
@@ -2293,6 +2295,7 @@
     padding: 0.625rem 1rem;
     border: solid thin currentColor;
   }
+  
   input {
     font-family: inherit;
     font-size: 1rem;
@@ -2304,6 +2307,7 @@
   a:hover {
     text-decoration: underline;
   }
+
 }
 @layer base {
   /*! modern-normalize v3.0.1 | MIT License | https://github.com/sindresorhus/modern-normalize */
@@ -2558,6 +2562,7 @@
     transform: translateY(0);
   }
 }
+
 @layer components {
   body .button {
     text-decoration: none;
@@ -2604,6 +2609,64 @@
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
     line-height: 1rem;
+  }
+}
+
+@layer components {
+  body {
+    margin: 2rem;
+  }
+  .title {
+    text-align: right;
+  }
+  .drag-uploader__drop-area {
+    border: 3px dashed #09cb2c;
+    border-radius: 0.625rem;
+    padding: 2rem;
+    text-align: center;
+    background-color: #fff;
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    margin: 2rem 0;
+  }
+  .drag-uploader__drop-area--highlight {
+    border-color: #f8f9fa;
+  }
+  .drag-uploader__label {
+    cursor: pointer;
+    color: #09cb2c;
+    text-decoration: underline;
+  }
+  .drag-uploader__label:hover {
+    color: rgb(37.2, 124.5, 253.2);
+  }
+  .drag-uploader__file-input {
+    display: none;
+  }
+  .drag-uploader__preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+  }
+  .drag-uploader__preview-container img {
+    max-width: 6.25rem;
+    max-height: 6.25rem;
+    border-radius: 0.625rem;
+    border: 1px solid #6c757d;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+@media (max-width: 768px) {
+  @layer components {
+    .drag-uploader__drop-area {
+      padding: 1rem;
+    }
+    .drag-uploader__preview-container {
+      gap: 0.5rem;
+    }
+    .drag-uploader__preview-container img {
+      max-width: 5rem;
+      max-height: 5rem;
+    }
   }
 }
 .navbar {
@@ -2872,5 +2935,6 @@
   font-size: 1.5rem;
   cursor: pointer;
 }
+
 
 /*# sourceMappingURL=main.css.map */
