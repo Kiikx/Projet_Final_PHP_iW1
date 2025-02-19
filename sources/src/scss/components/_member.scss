@@ -1,0 +1,55 @@
+@use '../partials/variables' as *;
+@use '../partials/mixins' as m;
+@use '../partials/functions' as f;
+
+.members-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: var(--bg-light);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+    th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    tr:hover {
+        background: var(--grey-100);
+    }
+}
+
+.members-actions {
+    display: flex;
+    gap: 8px;
+    
+    .button {
+        @include m.button-style(var(--primary-color), var(--primary-hover));
+        
+        &--danger {
+            @include m.button-style(var(--red-500), var(--red-400));
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .members-table {
+        th, td {
+            font-size: 14px;
+            padding: 8px;
+        }
+    }
+
+    .members-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $pageTitle ?></title>
+    <title>Tripipics </title>
     <link rel="stylesheet" href="../../dist/css/main.css">
 </head>
 
@@ -32,22 +32,13 @@
                     <td><?= htmlspecialchars($member['username']) ?></td>
                     <td><?= htmlspecialchars($member['role']) ?></td>
                     <?php if (Group::isOwner($_SESSION['user_id'], $group['id'])): ?>
-                        <td>
+                        <td class="members-actions">
                             <?php if ($_SESSION['user_id'] !== $member['user_id']): ?>
-                                <form method="POST" action="/group/change-role">
-                                    <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
-                                    <input type="hidden" name="user_id" value="<?= $member['user_id'] ?>">
-                                    <select name="role">
-                                        <option value="read" <?= $member['role'] === 'read' ? 'selected' : '' ?>>Lecture</option>
-                                        <option value="write" <?= $member['role'] === 'write' ? 'selected' : '' ?>>Écriture</option>
-                                    </select>
-                                    <button type="submit">Modifier</button>
-                                </form>
-
+                                <button class="button edit-role-btn" data-user-id="<?= $member['user_id'] ?>" data-role="<?= $member['role'] ?>">Modifier</button>
                                 <form method="POST" action="/group/remove-member">
                                     <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
                                     <input type="hidden" name="user_id" value="<?= $member['user_id'] ?>">
-                                    <button type="submit">Supprimer</button>
+                                    <button type="submit" class="button button--danger">Supprimer</button>
                                 </form>
                             <?php endif; ?>
                         </td>
@@ -55,7 +46,6 @@
                 </tr>
             <?php endforeach; ?>
         </table>
-
         <?php if (Group::isOwner($_SESSION['user_id'], $group['id'])): ?>
             <h2>Inviter un membre</h2>
             <form method="POST" id="invite-member-form">
@@ -146,6 +136,49 @@
         </form>
     <?php endif; ?>
 
+    <div id="role-modal" class="group-modal">
+        <div class="group-modal--content">
+            <button class="group-modal--close">&times;</button>
+            <h3>Modifier le rôle</h3>
+            <form method="POST" action="/group/change-role">
+                <input type="hidden" name="group_id" value="<?= $group['id'] ?>">
+                <input type="hidden" name="user_id" id="modal-user-id">
+                <label for="role">Nouveau rôle :</label>
+                <select name="role" id="modal-role">
+                    <option value="read">Lecture</option>
+                    <option value="write">Écriture</option>
+                </select>
+                <button type="submit" class="button">Mettre à jour</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const modal = document.getElementById("role-modal");
+            const modalUserId = document.getElementById("modal-user-id");
+            const modalRole = document.getElementById("modal-role");
+            const closeModal = document.querySelector(".group-modal--close");
+
+            document.querySelectorAll(".edit-role-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    modal.classList.add("group-modal--open");
+                    modalUserId.value = this.dataset.userId;
+                    modalRole.value = this.dataset.role;
+                });
+            });
+
+            closeModal.addEventListener("click", function() {
+                modal.classList.remove("group-modal--open");
+            });
+
+            window.addEventListener("click", function(event) {
+                if (event.target === modal) {
+                    modal.classList.remove("group-modal--open");
+                }
+            });
+        });
+    </script>
 
 </body>
 

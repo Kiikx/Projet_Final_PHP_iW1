@@ -2904,6 +2904,9 @@
   justify-content: center;
   align-items: center;
 }
+.group-modal--open {
+  display: flex;
+}
 .group-modal--content {
   background: white;
   padding: 2rem;
