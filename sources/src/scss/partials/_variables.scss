@@ -1,6 +1,6 @@
 // Colors
-
-@use "sass:color";
+@use "sass:map";
+@use "sass:color" as color;
 
 // Couleurs
 $container-bg: #f0f0f0;

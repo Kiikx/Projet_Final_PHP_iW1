@@ -76,17 +76,17 @@
         padding: 1rem;
     }
 
-    @media (min-width: 576px) {
+    @media (min-width: map-get($breakpoints,sm)) {
         width: 85%;
         max-width: f.rem(500);
     }
 
-    @media (min-width: 768px) {
+    @media (min-width: map-get($breakpoints,md)) {
         width: 70%;
         max-width: f.rem(550);
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: map-get($breakpoints,lg)) {
         width: 60%;
         max-width: f.rem(600);
     }
