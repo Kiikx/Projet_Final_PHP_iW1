@@ -34,7 +34,7 @@ class Router
       $method = $_SERVER["REQUEST_METHOD"];
       $fullUrl = $_SERVER["REQUEST_URI"];
       
-      
+
       $urlParts = parse_url($fullUrl);
       $path = $urlParts["path"]; 
       parse_str($urlParts["query"] ?? "", $_GET); 
@@ -45,18 +45,19 @@ class Router
               $regex = $this->convertPathToRegex($routePath);
   
               if (preg_match($regex, $path, $matches)) {
-                  array_shift($matches);
-  
-                  $controllerName = $route["controllerName"];
-                  $methodName = $route["methodName"];
-  
-                  if (!empty($matches)) {
-                      call_user_func_array([$controllerName, $methodName], $matches);
-                  } else {
-                      $controllerName::$methodName();
-                  }
-                  return;
-              }
+                array_shift($matches);
+                
+                $controllerName = $route["controllerName"];
+                $methodName = $route["methodName"];
+            
+                if (!empty($matches)) {
+                    call_user_func_array([$controllerName, $methodName], array_values($matches));
+                } else {
+                    $controllerName::$methodName();
+                }
+                return;
+            }
+            
           }
       }
   
