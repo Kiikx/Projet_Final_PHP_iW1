@@ -112,4 +112,69 @@ class UploadController
 
         echo "✅ Image supprimée avec succès.";
     }
+
+    public static function viewPublicPhoto($token)
+    {
+        $photo = Photo::getByToken($token);
+
+        if (!$photo) {
+            http_response_code(404);
+            die("❌ Photo non trouvée ou non partagée.");
+        }
+
+        header("Content-Type: image/jpeg");
+        readfile(__DIR__ . "/../uploads/group_{$photo['group_id']}/{$photo['filename']}");
+    }
+
+    public static function sharePhoto()
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté.");
+        }
+
+        $photoId = $_POST['photo_id'] ?? null;
+        if (!$photoId) {
+            die("❌ ID de photo manquant.");
+        }
+
+        $photo = Photo::getById($photoId);
+        if (!$photo) {
+            die("❌ Cette photo n'existe pas.");
+        }
+
+        if ($photo['user_id'] !== $_SESSION['user_id'] && !Group::isOwner($_SESSION['user_id'], $photo['group_id'])) {
+            die("❌ Vous ne pouvez pas partager cette photo.");
+        }
+
+        $token = Photo::generatePublicToken($photoId);
+
+        echo "✅ Photo partagée avec succès. Lien public: " . getenv('BASE_URL') . "/photos/$token";
+    }
+
+    public static function unsharePhoto()
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté.");
+        }
+
+        $photoId = $_POST['photo_id'] ?? null;
+        if (!$photoId) {
+            die("❌ ID de photo manquant.");
+        }
+
+        $photo = Photo::getById($photoId);
+        if (!$photo) {
+            die("❌ Cette photo n'existe pas.");
+        }
+
+        if ($photo['user_id'] !== $_SESSION['user_id'] && !Group::isOwner($_SESSION['user_id'], $photo['group_id'])) {
+            die("❌ Vous ne pouvez pas annuler le partage de cette photo.");
+        }
+
+        Photo::removePublicToken($photoId);
+
+        echo "✅ Le partage de la photo a été annulé.";
+    }
 }

@@ -41,6 +41,9 @@ $router->get("/logout", LoginController::class, "logout");
 $router->get("/upload", UploadController::class, "index"); 
 $router->post("/upload", UploadController::class, "post"); 
 $router->post("/photo/delete", UploadController::class, "deletePhoto");
+$router->get("/photo/{token}", UploadController::class, "viewPublicPhoto");
+$router->post("/photo/share", UploadController::class, "sharePhoto");
+$router->post("/photo/unshare", UploadController::class, "unsharePhoto");
 
 // GROUPS
 $router->post("/group/create", GroupController::class, "create");
