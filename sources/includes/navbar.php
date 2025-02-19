@@ -15,6 +15,9 @@ function renderNavbar($pageTitle = "Tripipics") {
 
         <?php if ($user): ?>
             <p class="navbar__user"><?php echo($user->username); ?></p>
+
+            <a href="/groups" class="navbar__logout">Mes Groupes</a>
+
             <a href="/logout" class="navbar__logout">Déconnexion</a>
         <?php else: ?>
             <a href="/login" class="navbar__login">Connexion</a>
