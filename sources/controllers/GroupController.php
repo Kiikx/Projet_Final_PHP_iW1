@@ -9,10 +9,13 @@ class GroupController
      */
     public static function create()
     {
+        $errors = [];
+
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
         if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
             die("❌ Vous devez être connecté pour créer un groupe.");
         }
 
@@ -24,6 +27,7 @@ class GroupController
         $groupId = Group::create($groupName, $_SESSION['user_id']);
         if ($groupId) {
             GroupMember::addMember($groupId, $_SESSION['user_id'], 'owner');
+            header("Location: /groups");
             echo "✅ Groupe créé avec succès.";
         } else {
             die("❌ Erreur lors de la création du groupe.");
@@ -33,14 +37,16 @@ class GroupController
     /**
      * Supprimer un groupe (seul le propriétaire peut le faire)
      */
-    public static function delete()
+    public static function delete($groupId)
     {
-        session_start();
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
 
-        $groupId = $_POST['group_id'] ?? null;
         if (!$groupId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
             die("❌ Vous n'avez pas le droit de supprimer ce groupe.");
         }
@@ -53,7 +59,7 @@ class GroupController
             }
             Photo::delete($photo['id']);
         }
-    
+
         // 🔥 Supprimer le dossier du groupe s’il est vide
         $uploadDir = __DIR__ . "/../uploads/group_{$groupId}/";
         if (is_dir($uploadDir)) {
@@ -61,11 +67,11 @@ class GroupController
         }
 
         if (Group::delete($groupId)) {
+            header("Location: /groups");
             echo "✅ Groupe supprimé.";
         } else {
             die("❌ Erreur lors de la suppression.");
         }
-
     }
 
     /**
@@ -113,19 +119,19 @@ class GroupController
         if (!$groupId || !$userId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
             die("❌ Vous ne pouvez pas retirer ce membre.");
         }
-        
+
         if (!GroupMember::isMember($userId, $groupId)) {
             die("❌ Cet utilisateur n'est pas dans le groupe.");
         }
 
         // Vérifier si l'utilisateur retiré est un owner
         $isOwner = Group::isOwner($userId, $groupId);
-        
+
         // Si c'est un owner, vérifier qu'il y en a d'autres avant de le supprimer
         if ($isOwner && !GroupMember::hasMultipleOwners($groupId)) {
             die("❌ Impossible de supprimer ce membre : il est le dernier propriétaire du groupe.");
         }
-        
+
 
         if (GroupMember::removeMember($groupId, $userId)) {
             echo "✅ Membre retiré.";
@@ -135,35 +141,76 @@ class GroupController
     }
 
     public static function changeRole()
-{
-    session_start();
-    if (!isset($_SESSION['user_id'])) {
-        die("❌ Vous devez être connecté.");
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté.");
+        }
+
+        $groupId = $_POST['group_id'] ?? null;
+        $userId = $_POST['user_id'] ?? null;
+        $newRole = $_POST['role'] ?? null;
+
+        if (!$groupId || !$userId || !$newRole || !in_array($newRole, ['read', 'write', 'owner'])) {
+            die("❌ Rôle invalide.");
+        }
+
+        // Seul un `owner` peut changer les rôles
+        if (!Group::isOwner($_SESSION['user_id'], $groupId)) {
+            die("❌ Seul un propriétaire peut modifier les rôles.");
+        }
+
+        // Vérifier qu'on ne supprime pas le dernier `owner`
+        if ($newRole !== 'owner' && Group::isOwner($userId, $groupId) && !GroupMember::hasMultipleOwners($groupId)) {
+            die("❌ Impossible de rétrograder ce membre : il est le dernier propriétaire.");
+        }
+
+        if (GroupMember::updateRole($groupId, $userId, $newRole)) {
+            echo "✅ Rôle mis à jour.";
+        } else {
+            die("❌ Erreur lors de la modification du rôle.");
+        }
+    }
+    public static function index()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté pour voir les groupes.");
+        }
+        
+
+        require_once __DIR__ . '/../models/Group.php';
+        $groups = Group::getUserGroups($_SESSION['user_id']);
+        
+        require_once __DIR__ . '/../views/group/index.php';
     }
 
-    $groupId = $_POST['group_id'] ?? null;
-    $userId = $_POST['user_id'] ?? null;
-    $newRole = $_POST['role'] ?? null;
+    public static function show($groupId)
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-    if (!$groupId || !$userId || !$newRole || !in_array($newRole, ['read', 'write', 'owner'])) {
-        die("❌ Rôle invalide.");
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            die("❌ Vous devez être connecté pour voir ce groupe.");
+        }
+
+        require_once __DIR__ . '/../models/Group.php';
+        require_once __DIR__ . '/../models/GroupMember.php';
+        require_once __DIR__ . '/../models/Photo.php';
+
+        $group = Group::getById($groupId);
+        if (!$group) {
+            die("❌ Ce groupe n'existe pas.");
+        }
+
+        $isMember = GroupMember::isMember($_SESSION['user_id'], $groupId);
+        $photos = Photo::getByGroup($groupId);
+
+        require_once __DIR__ . '/../views/group/show.php';
     }
-
-    // Seul un `owner` peut changer les rôles
-    if (!Group::isOwner($_SESSION['user_id'], $groupId)) {
-        die("❌ Seul un propriétaire peut modifier les rôles.");
-    }
-
-    // Vérifier qu'on ne supprime pas le dernier `owner`
-    if ($newRole !== 'owner' && Group::isOwner($userId, $groupId) && !GroupMember::hasMultipleOwners($groupId)) {
-        die("❌ Impossible de rétrograder ce membre : il est le dernier propriétaire.");
-    }
-
-    if (GroupMember::updateRole($groupId, $userId, $newRole)) {
-        echo "✅ Rôle mis à jour.";
-    } else {
-        die("❌ Erreur lors de la modification du rôle.");
-    }
-}
-
 }
