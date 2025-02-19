@@ -49,7 +49,7 @@
         }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: map-get($breakpoints,md)) {
         &__title {
             font-size: 1.5rem;
         }
