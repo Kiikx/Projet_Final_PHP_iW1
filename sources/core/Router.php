@@ -51,10 +51,10 @@ class Router
                   $methodName = $route["methodName"];
   
                   if (!empty($matches)) {
-                      call_user_func_array([$controllerName, $methodName], $matches);
-                  } else {
-                      $controllerName::$methodName();
-                  }
+                    call_user_func_array([$controllerName, $methodName], array_values($matches));
+                } else {
+                    $controllerName::$methodName();
+                }
                   return;
               }
           }
