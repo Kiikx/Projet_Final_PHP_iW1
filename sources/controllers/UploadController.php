@@ -147,6 +147,10 @@ class UploadController
             die("❌ Vous ne pouvez pas partager cette photo.");
         }
 
+        if (!empty($photo['public_token'])) {
+            die("✅ Cette photo est déjà partagée : /photo/{$photo['public_token']}");
+        }
+
         $token = Photo::generatePublicToken($photoId);
 
         echo "✅ Photo partagée avec succès. Lien public: " . getenv('BASE_URL') . "/photos/$token";

@@ -76,8 +76,15 @@ class User
         $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
         $stmt->execute(["id" => $id]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
         return $user ? new User($user) : null;
     }
-    
+
+    public static function getByEmail($email)
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

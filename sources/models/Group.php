@@ -18,6 +18,13 @@ class Group
         return $stmt->execute(['id' => $groupId]);
     }
 
+    public static function updateName($groupId, $name)
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("UPDATE groups SET name = :name WHERE id = :id");
+        return $stmt->execute(['name' => $name, 'id' => $groupId]);
+    }
+
     public static function isOwner($userId, $groupId)
     {
         $pdo = Database::getConnection();

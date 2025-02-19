@@ -60,7 +60,6 @@ class GroupController
             Photo::delete($photo['id']);
         }
 
-        // 🔥 Supprimer le dossier du groupe s’il est vide
         $uploadDir = __DIR__ . "/../uploads/group_{$groupId}/";
         if (is_dir($uploadDir)) {
             rmdir($uploadDir);
@@ -75,29 +74,73 @@ class GroupController
     }
 
     /**
+     * Modifier le nom d'un groupe
+     */
+    public static function update($groupId)
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté.");
+        }
+
+        if (!$groupId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
+            die("❌ Vous n'avez pas le droit de modifier ce groupe.");
+        }
+
+        $newName = trim($_POST['group_name'] ?? '');
+        if (empty($newName)) {
+            die("❌ Le nom du groupe est obligatoire.");
+        }
+
+        if (Group::updateName($groupId, $newName)) {
+            header("Location: /group/$groupId");
+            echo "✅ Nom du groupe mis à jour.";
+        } else {
+            die("❌ Erreur lors de la mise à jour.");
+        }
+    }
+
+    /**
      * Ajouter un utilisateur à un groupe
      */
-    public static function addMember()
+    public static function addMember($groupId)
     {
         session_start();
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté.");
         }
 
-        $groupId = $_POST['group_id'] ?? null;
-        $userId = $_POST['user_id'] ?? null;
+        $email = $_POST['email'] ?? null;
         $role = $_POST['role'] ?? 'read';
 
-        if (!$groupId || !$userId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Vous ne pouvez pas ajouter un membre car vous n'êtes pas propriétaire du groupe.");
+        if (!$email) {
+            die("❌ Email obligatoire.");
         }
+
+        $group = Group::getById($groupId);
+        if (!$group) {
+            die("❌ Groupe introuvable.");
+        }
+
+        if (!Group::isOwner($_SESSION['user_id'], $groupId)) {
+            die("❌ Seul un propriétaire peut ajouter des membres.");
+        }
+
+        $user = User::getByEmail($email);
+        if (!$user) {
+            die("❌ Aucun utilisateur trouvé avec cet email.");
+        }
+
+        $userId = $user['id'];
 
         if (GroupMember::isMember($userId, $groupId)) {
             die("❌ Cet utilisateur est déjà membre du groupe.");
         }
 
         if (GroupMember::addMember($groupId, $userId, $role)) {
-            echo "✅ Membre ajouté.";
+            echo "✅ Membre ajouté avec le rôle : $role";
         } else {
             die("❌ Erreur lors de l'ajout.");
         }
@@ -140,6 +183,39 @@ class GroupController
         }
     }
 
+    public static function leaveGroup($groupId)
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            die("❌ Vous devez être connecté.");
+        }
+
+        $userId = $_SESSION['user_id'];
+
+        // 🔥 Vérifier si le groupe existe
+        $group = Group::getById($groupId);
+        if (!$group) {
+            die("❌ Groupe introuvable.");
+        }
+
+        if (!GroupMember::isMember($userId, $groupId)) {
+            die("❌ Vous ne faites pas partie de ce groupe.");
+        }
+
+        if (Group::isOwner($userId, $groupId)) {
+            if (!GroupMember::hasMultipleOwners($groupId)) {
+                die("❌ Vous êtes le dernier propriétaire. Transférez la propriété avant de quitter.");
+            }
+        }
+
+        if (GroupMember::removeMember($groupId, $userId)) {
+            echo "✅ Vous avez quitté le groupe.";
+        } else {
+            die("❌ Erreur lors du départ.");
+        }
+    }
+
+
     public static function changeRole()
     {
         session_start();
@@ -180,11 +256,11 @@ class GroupController
         if (!isset($_SESSION['user_id'])) {
             die("❌ Vous devez être connecté pour voir les groupes.");
         }
-        
+
 
         require_once __DIR__ . '/../models/Group.php';
         $groups = Group::getUserGroups($_SESSION['user_id']);
-        
+
         require_once __DIR__ . '/../views/group/index.php';
     }
 
