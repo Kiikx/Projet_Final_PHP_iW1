@@ -2756,7 +2756,7 @@
     max-width: 34.375rem;
   }
 }
-@media (min-width: 1024px) {
+@media (min-width: 992px) {
   .form {
     width: 60%;
     max-width: 37.5rem;
