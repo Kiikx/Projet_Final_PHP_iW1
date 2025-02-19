@@ -48,6 +48,20 @@ class GroupMember
         return $stmt->execute(['role' => $newRole, 'group_id' => $groupId, 'user_id' => $userId]);
     }
 
+    public static function getGroupMembers($groupId)
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("
+        SELECT users.id as user_id, users.username, group_members.role 
+        FROM group_members 
+        JOIN users ON group_members.user_id = users.id
+        WHERE group_members.group_id = :group_id
+    ");
+        $stmt->execute(['group_id' => $groupId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
     public static function getMemberCount($groupId)
     {
         $pdo = Database::getConnection();

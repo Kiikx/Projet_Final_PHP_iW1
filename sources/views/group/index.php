@@ -30,7 +30,7 @@
                     <div class="group-list__item--links">
                         <a href=<?php echo ("/group/" . $group["id"]) ?> class="group-list__item--link">Voir</a>
                         <?php if ($group["owner_id"] == $_SESSION["user_id"]): ?>
-                            <button class="group-list__item--button" onclick="openEditPopup(1, 'Nouveau Nom')">Modifier</button>
+                            <button class="group-list__item--button" onclick="openEditPopup(<?php echo $group['id']; ?>, '<?php echo $group['name']; ?>')">Modifier</button>
                             <form method="POST" action=<?php echo ("/group/delete/" . $group["id"]) ?>>
                                 <input type="hidden" name="group_id" value=<?php echo ($group["id"]); ?>>
                                 <button type="submit" class="group-list__item--button">Supprimer</button>
@@ -59,9 +59,9 @@
         <div class="group-modal--content">
             <button class="group-modal--close" onclick="closeEditPopup()">×</button>
             <h2>Modifier le groupe</h2>
-            <form id="editGroupForm" method="POST" action="/group/update">
+            <form id="editGroupForm" method="POST" action=<?php echo ("/group/update/" . $group["id"]) ?>>
                 <input type="hidden" name="group_id" id="groupId">
-                <label for="groupName">Nom du groupe</label>
+                <label for="groupName">Nom du groupe :</label>
                 <input type="text" name="group_name" id="groupName" required>
                 <button type="submit" class="group-list__item--button">Enregistrer</button>
             </form>

@@ -48,8 +48,10 @@ $router->post("/photo/unshare", UploadController::class, "unsharePhoto");
 // GROUPS
 $router->post("/group/create", GroupController::class, "create");
 $router->post("/group/delete/{slug}", GroupController::class, "delete");
-$router->post("/group/add-member", GroupController::class, "addMember");
+$router->post("/group/update/{slug}", GroupController::class, "update");
+$router->post("/group/{slug}/add-member", GroupController::class, "addMember");
 $router->post("/group/remove-member", GroupController::class, "removeMember");
+$router->post("/group/{slug}/leave", GroupController::class, "leaveGroup");
 $router->post("/group/change-role", GroupController::class, "changeRole");
 
 $router->get("/groups", GroupController::class, "index");
