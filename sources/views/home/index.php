@@ -15,6 +15,18 @@ include_once "includes/navbar.php";
 renderNavbar();
 ?>
 
+<section class="banner">
+    <div class="banner__content">
+        <h1 class="banner__title">Capturez vos aventures, partagez vos émotions</h1>
+        <p class="banner__subtitle">
+            Avec TripiPics, revivez chaque instant de vos road trips à travers des albums collaboratifs et des souvenirs inoubliables.
+        </p>
+        
+    </div>
+</section>
+
+
+
 </body>
 
 </html>
