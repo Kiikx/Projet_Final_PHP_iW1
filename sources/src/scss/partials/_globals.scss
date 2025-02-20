@@ -1,48 +1,61 @@
 @use "fonts";
+@use "themes";
 @use "variables" as v;
 @use "sass:color";
 @use "functions" as f;
+
+
 @layer base {
 	:root {
+
+		// Générer les variables CSS basées sur les couleurs définies dans v.$colors
 		@each $name, $value in v.$colors {
-			// --#{$name}: #{$value};
-			// @if ($name != "text-color" and $name != "shadow-color") {
-			// 	--#{$name}-hover: #{color.scale($value, $lightness: 10%)};
-			// 	--#{$name}-transparent: #{color.scale($value, $alpha: -40%)};
-			// }
 			@each $name, $color in v.$colors {
-				@if ($name == "black" or $name == "white") {
+				@if ($name =="black" or $name =="white") {
 					--#{$name}: #{color.scale($color, $space: hsl)};
-				} @else {
+				}
+
+				@else {
 					$baseLightness: color.channel($color, "lightness", $space: hsl);
 					$baseHue: color.channel($color, "hue", $space: hsl);
 					$baseSaturation: color.channel($color, "saturation", $space: hsl);
+
 					@each $shade, $percent in v.$shades {
 						$val: hsl($baseHue $baseSaturation $percent);
-						@if (
-							$percent <= $baseLightness and ($percent + 8%) >= $baseLightness
-						) {
-							$val: hsl(
-								$baseHue $baseSaturation $baseLightness
-							); // conserver la couleur d'entrée
+
+						@if ($percent <=$baseLightness and ($percent + 8%) >=$baseLightness) {
+							$val: hsl($baseHue $baseSaturation $baseLightness);
 						}
+
 						--#{$name}-#{$shade}: #{color.scale($val, $space: hsl)};
 					}
 				}
 			}
 		}
+
+		// Variables spécifiques au thème clair
+		--bg-color: #{v.$bg-light};
+		--text-color: #{v.$text-light};
+	}
+
+	.dark-mode {
+		// Variables spécifiques au thème sombre
+		--bg-color: #{v.$bg-dark};
+		--text-color: #{v.$text-dark};
 	}
 
 	body {
 		font-family: fonts.$font1;
-		background-color: var(--white);
-		color: var(--black);
+		background-color: var(--bg-color);
+		color: var(--text-color);
+		min-height: 100vh;
+
+		transition: background-color 0.3s ease, color 0.3s ease;
 	}
 
 	input {
 		border-radius: f.rem(6);
 		padding: f.rem(10) f.rem(16);
 		border: solid thin currentColor;
-		//background-color: var(--input-bg-color);
 	}
 }
