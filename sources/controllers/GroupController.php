@@ -18,7 +18,10 @@ class GroupController
 
         $groupName = trim($_POST['name'] ?? '');
         if (empty($groupName)) {
-            die("❌ Le nom du groupe est obligatoire.");
+            
+            header("Location: /groups");
+            return;
+
         }
 
         $groupId = Group::create($groupName, $_SESSION['user_id']);
@@ -27,7 +30,8 @@ class GroupController
             header("Location: /groups");
             echo "✅ Groupe créé avec succès.";
         } else {
-            die("❌ Erreur lors de la création du groupe.");
+            header("Location: /groups");
+            return;
         }
     }
 
@@ -37,11 +41,13 @@ class GroupController
     public static function delete($groupId)
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /login");
+            return;
         }
 
         if (!$groupId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Vous n'avez pas le droit de supprimer ce groupe.");
+            header("Location: /groups");
+            return;
         }
 
         $photos = Photo::getByGroup($groupId);
@@ -62,7 +68,8 @@ class GroupController
             header("Location: /groups");
             echo "✅ Groupe supprimé.";
         } else {
-            die("❌ Erreur lors de la suppression.");
+            header("Location: /groups");
+            return;
         }
     }
 
@@ -72,23 +79,27 @@ class GroupController
     public static function update($groupId)
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /login");
+            return;
         }
 
         if (!$groupId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Vous n'avez pas le droit de modifier ce groupe.");
+            header("Location: /groups");
+            return;
         }
 
         $newName = trim($_POST['group_name'] ?? '');
         if (empty($newName)) {
-            die("❌ Le nom du groupe est obligatoire.");
+            header("Location: /groups");
+            return;
         }
 
         if (Group::updateName($groupId, $newName)) {
-            header("Location: /group/$groupId");
+            header("Location: /groups");
             echo "✅ Nom du groupe mis à jour.";
         } else {
-            die("❌ Erreur lors de la mise à jour.");
+            header("Location: /groups");
+            return;
         }
     }
 
@@ -98,40 +109,47 @@ class GroupController
     public static function addMember($groupId)
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         $email = $_POST['email'] ?? null;
         $role = $_POST['role'] ?? 'read';
 
         if (!$email) {
-            die("❌ Email obligatoire.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         $group = Group::getById($groupId);
         if (!$group) {
-            die("❌ Groupe introuvable.");
+            header("Location: /groups");
+            return;
         }
 
         if (!Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Seul un propriétaire peut ajouter des membres.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         $user = User::getByEmail($email);
         if (!$user) {
-            die("❌ Aucun utilisateur trouvé avec cet email.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         $userId = $user['id'];
 
         if (GroupMember::isMember($userId, $groupId)) {
-            die("❌ Cet utilisateur est déjà membre du groupe.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         if (GroupMember::addMember($groupId, $userId, $role)) {
             echo "✅ Membre ajouté avec le rôle : $role";
         } else {
-            die("❌ Erreur lors de l'ajout.");
+            header("Location: /group/$groupId");
+            return;
         }
     }
 
@@ -141,18 +159,21 @@ class GroupController
     public static function removeMember()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /login");
+            return;
         }
 
         $groupId = $_POST['group_id'] ?? null;
         $userId = $_POST['user_id'] ?? null;
 
         if (!$groupId || !$userId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Vous ne pouvez pas retirer ce membre.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         if (!GroupMember::isMember($userId, $groupId)) {
-            die("❌ Cet utilisateur n'est pas dans le groupe.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         // Vérifier si l'utilisateur retiré est un owner
@@ -160,21 +181,24 @@ class GroupController
 
         // Si c'est un owner, vérifier qu'il y en a d'autres avant de le supprimer
         if ($isOwner && !GroupMember::hasMultipleOwners($groupId)) {
-            die("❌ Impossible de supprimer ce membre : il est le dernier propriétaire du groupe.");
+            header("Location: /group/$groupId");
+            return;
         }
 
 
         if (GroupMember::removeMember($groupId, $userId)) {
             echo "✅ Membre retiré.";
         } else {
-            die("❌ Erreur lors de la suppression.");
+            header("Location: /group/$groupId");
+            return;
         }
     }
 
     public static function leaveGroup($groupId)
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /login");
+            return;
         }
 
         $userId = $_SESSION['user_id'];
@@ -182,23 +206,27 @@ class GroupController
         // 🔥 Vérifier si le groupe existe
         $group = Group::getById($groupId);
         if (!$group) {
-            die("❌ Groupe introuvable.");
+            header("Location: /groups");
+            return;
         }
 
         if (!GroupMember::isMember($userId, $groupId)) {
-            die("❌ Vous ne faites pas partie de ce groupe.");
+            header("Location: /groups");
+            return;
         }
 
         if (Group::isOwner($userId, $groupId)) {
             if (!GroupMember::hasMultipleOwners($groupId)) {
-                die("❌ Vous êtes le dernier propriétaire. Transférez la propriété avant de quitter.");
+                header("Location: /group/$groupId");
+            return;
             }
         }
 
         if (GroupMember::removeMember($groupId, $userId)) {
             echo "✅ Vous avez quitté le groupe.";
         } else {
-            die("❌ Erreur lors du départ.");
+            header("Location: /group/$groupId");
+            return;
         }
     }
 
@@ -206,7 +234,8 @@ class GroupController
     public static function changeRole()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté.");
+            header("Location: /login");
+            return;
         }
 
         $groupId = $_POST['group_id'] ?? null;
@@ -214,29 +243,34 @@ class GroupController
         $newRole = $_POST['role'] ?? null;
 
         if (!$groupId || !$userId || !$newRole || !in_array($newRole, ['read', 'write', 'owner'])) {
-            die("❌ Rôle invalide.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         // Seul un `owner` peut changer les rôles
         if (!Group::isOwner($_SESSION['user_id'], $groupId)) {
-            die("❌ Seul un propriétaire peut modifier les rôles.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         // Vérifier qu'on ne supprime pas le dernier `owner`
         if ($newRole !== 'owner' && Group::isOwner($userId, $groupId) && !GroupMember::hasMultipleOwners($groupId)) {
-            die("❌ Impossible de rétrograder ce membre : il est le dernier propriétaire.");
+            header("Location: /group/$groupId");
+            return;
         }
 
         if (GroupMember::updateRole($groupId, $userId, $newRole)) {
             echo "✅ Rôle mis à jour.";
         } else {
-            die("❌ Erreur lors de la modification du rôle.");
+            header("Location: /group/$groupId");
+            return;
         }
     }
     public static function index()
     {
         if (!isset($_SESSION['user_id'])) {
-            die("❌ Vous devez être connecté pour voir les groupes.");
+            header("Location: /login");
+            return;
         }
 
 
@@ -251,7 +285,7 @@ class GroupController
 
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
-            die("❌ Vous devez être connecté pour voir ce groupe.");
+            return;
         }
 
         require_once __DIR__ . '/../models/Group.php';
@@ -260,7 +294,8 @@ class GroupController
 
         $group = Group::getById($groupId);
         if (!$group) {
-            die("❌ Ce groupe n'existe pas.");
+            header("Location: /groups");
+            return;
         }
 
         $isMember = GroupMember::isMember($_SESSION['user_id'], $groupId);

@@ -1,7 +1,7 @@
 @use '../partials/variables' as *;
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
-
+@use "sass:map";
 .form {
     background: $container-bg;
     padding: 1.5rem;
@@ -22,12 +22,12 @@
     }
 
     &__error-message {
-        color: map-get($colors,"red");
+        color: map.get($colors,"red");
         font-size: 1rem;
     }
 
     &__sucess-message {
-        color: map-get($colors,"green");
+        color: map.get($colors,"green");
         font-size: 1rem;
     }
 
@@ -76,17 +76,17 @@
         padding: 1rem;
     }
 
-    @media (min-width: map-get($breakpoints,sm)) {
+    @media (min-width: map.get($breakpoints,sm)) {
         width: 85%;
         max-width: f.rem(500);
     }
 
-    @media (min-width: map-get($breakpoints,md)) {
+    @media (min-width: map.get($breakpoints,md)) {
         width: 70%;
         max-width: f.rem(550);
     }
 
-    @media (min-width: map-get($breakpoints,lg)) {
+    @media (min-width: map.get($breakpoints,lg)) {
         width: 60%;
         max-width: f.rem(600);
     }
