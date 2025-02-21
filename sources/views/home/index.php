@@ -21,7 +21,7 @@ renderNavbar();
         <p class="banner__subtitle">
             Avec TripiPics, revivez chaque instant de vos road trips à travers des albums collaboratifs et des souvenirs inoubliables.
         </p>
-        
+        <!-- <img src="../../images/background.png"> -->
     </div>
 </section>
 
