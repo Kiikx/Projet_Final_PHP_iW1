@@ -58,4 +58,22 @@
 		padding: f.rem(10) f.rem(16);
 		border: solid thin currentColor;
 	}
+
+}
+
+
+	input {
+		font-family: inherit;
+		font-size: v.$font-size-base;
+	}
+	
+	a {
+		text-decoration: none;
+		color: v.$primary-color;
+	
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+	
 }

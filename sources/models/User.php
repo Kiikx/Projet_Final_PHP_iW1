@@ -57,18 +57,34 @@ class User
             "email" => $data["email"],
             "password" => $data["password"]
         ]);
-    } 
+    }
 
     // Mettre a jour le mot de passe
     public static function updatePassword(int $user_id, string $password): void
     {
 
-    $pdo = Database::getConnection();
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
-    $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :id");
-    $stmt->execute(["password" => $hashedPassword, "id" => $user_id]);
+        $pdo = Database::getConnection();
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+        $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = :id");
+        $stmt->execute(["password" => $hashedPassword, "id" => $user_id]);
     }
 
+    public static function findById(int $id): ?User
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(["id" => $id]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ? new User($user) : null;
+    }
+
+    public static function getByEmail($email)
+    {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

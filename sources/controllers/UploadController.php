@@ -11,9 +11,15 @@ class UploadController
     public static function post()
     {
         session_start();
+        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['image'])) {
-            die("❌ Requête invalide.");
+            header("Location: /groups");
+            return;
         }
+
+        // Récupération des infos utilisateur et groupe
+        $groupId = $_POST['group_id'] ?? null;
+        $userId = $_SESSION['user_id'] ?? null;
 
         // Définition des contraintes de sécurité pour l'upload
         $file = $_FILES['image'];
@@ -21,30 +27,33 @@ class UploadController
         $maxSize = 2 * 1024 * 1024; // 2MB
 
         if (!in_array($file['type'], $allowedTypes)) {
-            die("❌ Format non autorisé.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         if ($file['size'] > $maxSize) {
-            die("❌ Fichier trop volumineux.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
-        // Récupération des infos utilisateur et groupe
-        $groupId = $_POST['group_id'] ?? null;
-        $userId = $_SESSION['user_id'] ?? null;
+
 
         // Vérification du rôle de l'utilisateur
         $userRole = GroupMember::getRole($userId, $groupId);
         if (!in_array($userRole, ['write', 'owner'])) {
-            die("❌ Vous n'avez pas la permission d'uploader des images.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         if (!$groupId || !$userId) {
-            die("❌ Le groupe et l'utilisateur sont requis.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         // Vérifier si l'utilisateur appartient bien au groupe avant l'upload
         if (!GroupMember::isMember($userId, $groupId)) {
-            die("❌ Vous ne pouvez pas uploader dans ce groupe.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         // 🔥 Stockage LOCAL pour l'instant (dans le dossier `uploads/{group_id}/`)
@@ -72,7 +81,8 @@ class UploadController
             Photo::save($filename, $userId, $groupId);
             echo "✅ Upload réussi : $filename";
         } else {
-            die("❌ Erreur lors de l'upload.");
+            header("Location: /groups/$groupId");
+            return;
         }
     }
 
@@ -80,25 +90,31 @@ class UploadController
     {
         session_start();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            die("❌ Requête invalide.");
+            header("Location: /groups");
+            return;
         }
 
         $photoId = $_POST['photo_id'] ?? null;
         $userId = $_SESSION['user_id'] ?? null;
+        $groupId = $_POST['group_id'] ?? null;
+
 
         if (!$photoId || !$userId) {
-            die("❌ L'ID de la photo et l'utilisateur sont requis.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         // Récupérer l’image en base
         $photo = Photo::getById($photoId);
         if (!$photo) {
-            die("❌ Cette image n'existe pas.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         // Vérifier si l'utilisateur a le droit de supprimer cette image
         if (!Group::isOwner($userId, $photo['group_id']) && $photo['user_id'] != $userId) {
-            die("❌ Vous ne pouvez pas supprimer cette image.");
+            header("Location: /groups/$groupId");
+            return;
         }
 
         // Supprimer le fichier du stockage local
@@ -110,6 +126,88 @@ class UploadController
         // Supprimer l’entrée en base de données
         Photo::delete($photoId);
 
-        echo "✅ Image supprimée avec succès.";
+        header("Location: /groups/$groupId");
+        return;
+    }
+
+    public static function viewPublicPhoto($token)
+    {
+        $photo = Photo::getByToken($token);
+
+        if (!$photo) {
+            http_response_code(404);
+            header("Location: /groups");
+            return;
+        }
+
+        header("Content-Type: image/jpeg");
+        readfile(__DIR__ . "/../uploads/group_{$photo['group_id']}/{$photo['filename']}");
+    }
+
+    public static function sharePhoto()
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            return;
+        }
+
+        $photoId = $_POST['photo_id'] ?? null;
+        if (!$photoId) {
+            header("Location: /groups");
+            return;
+        }
+
+        $photo = Photo::getById($photoId);
+        if (!$photo) {
+            header("Location: /groups");
+            return;
+        }
+
+        if ($photo['user_id'] !== $_SESSION['user_id'] && !Group::isOwner($_SESSION['user_id'], $photo['group_id'])) {
+            header("Location: /groups");
+            return;
+        }
+
+        if (!empty($photo['public_token'])) {
+            header("Location: /groups");
+            return;
+        }
+
+        $token = Photo::generatePublicToken($photoId);
+
+        header("Location: /groups");
+        return;
+    }
+
+    public static function unsharePhoto()
+    {
+        session_start();
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: /login");
+            return;
+        }
+
+        $photoId = $_POST['photo_id'] ?? null;
+        if (!$photoId) {
+            header("Location: /groups");
+            return;
+        }
+
+        $photo = Photo::getById($photoId);
+        if (!$photo) {
+            header("Location: /groups");
+            return;
+        }
+
+        if ($photo['user_id'] !== $_SESSION['user_id'] && !Group::isOwner($_SESSION['user_id'], $photo['group_id'])) {
+            header("Location: /groups");
+            return;
+        }
+
+        Photo::removePublicToken($photoId);
+
+        header("Location: /groups");
+        return;
     }
 }

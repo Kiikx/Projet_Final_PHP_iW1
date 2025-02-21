@@ -1,0 +1,92 @@
+@use '../partials/variables' as *;
+@use '../partials/mixins' as *;
+@use '../partials/functions' as f;
+@use "sass:color";
+
+
+.group-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(f.rem(220), 1fr)); // Adaptation automatique
+    gap: 1rem;
+    padding: 1rem;
+    justify-content: center;
+
+    &__item {
+        background: $primary-color;
+        color: white;
+        padding: 1rem;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: transform 0.3s ease-in-out;
+        min-width: f.rem(220);
+        max-width: 100%;
+        overflow: hidden;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        &--content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        &--name {
+            text-align: center;
+            margin-bottom: 0.35rem;
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        &--members {
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        &--links {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        &--link,
+        &--button {
+            background: $secondary-color;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: $border-radius-small;
+            text-decoration: none;
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+            display: inline-block;
+            text-align: center;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+
+            &:hover {
+                background: color.adjust($secondary-color, $lightness: -10%)
+
+            }
+        }
+
+        &--button {
+            font-family: inherit;
+        }
+    }
+}
