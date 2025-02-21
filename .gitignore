@@ -1,7 +1,9 @@
 **/.bash_history
 **/.env
 **/database
-**/node_modules# Ignorer la caisse (transactions, comptes...)
+**/node_modules
+**/sources/dist
+# Ignorer la caisse (transactions, comptes...)
 caisse/
 caisse/*.csv
 caisse/*.json
