@@ -3,15 +3,3 @@
 **/database
 **/node_modules
 **/sources/dist
-# Ignorer la caisse (transactions, comptes...)
-caisse/
-caisse/*.csv
-caisse/*.json
-caisse/*.txt
-# Ignorer les stocks temporaires
-stock/temp/
-stock/temp/*.log
-# Ignorer les backups de recettes
-recettes/backup/
-*.bak
-*.old

@@ -1,0 +1,63 @@
+@use '../partials/variables' as *;
+@use '../partials/mixins' as m;
+@use '../partials/functions' as f;
+@use "sass:color";
+
+.group-member-add {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: f.rem(500);
+    margin: f.rem(20) auto;
+    padding: f.rem(16);
+
+    &__title {
+        font-size: f.rem(20);
+        font-weight: bold;
+        color: var(--text-primary);
+        margin-bottom: f.rem(12);
+        text-align: center;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: f.rem(10);
+        width: 100%;
+    }
+
+    &__label {
+        font-size: f.rem(14);
+        font-weight: bold;
+        color: var(--text-secondary);
+    }
+
+    &__input {
+        width: 100%;
+        padding: f.rem(10);
+        border: f.rem(1) solid var(--border-color);
+        border-radius: $border-radius-small;
+        font-size: f.rem(14);
+        background: var(--background-light);
+    }
+
+    &__select {
+        width: 100%;
+        padding: f.rem(10);
+        border: f.rem(1) solid var(--border-color);
+        border-radius: $border-radius-small;
+        background: var(--background-light);
+        font-size: f.rem(14);
+        cursor: pointer;
+    }
+
+    &__button {
+        @include m.button-style(var(--primary-color), var(--primary-hover));
+        width: 100%;
+        padding: f.rem(12);
+        font-size: f.rem(14);
+        border-radius: $border-radius;
+        text-align: center;
+    }
+}
