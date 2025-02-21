@@ -101,13 +101,13 @@
             <div class="gallery">
                 <?php foreach ($photos as $photo): ?>
                     <img src="/uploads/group_<?php echo $group['id']; ?>/<?php echo $photo['filename']; ?>" alt="Photo">
-                    <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] === $photo['user_id']): ?>
+                    <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] == $photo['user_id']): ?>
                         <form method="POST" action="/photo/delete">
                             <input type="hidden" name="photo_id" value="<?= $photo['id'] ?>">
                             <button type="submit" class="delete-photo-btn">❌ Supprimer</button>
                         </form>
                     <?php endif; ?>
-                    <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] === $photo['user_id']): ?>
+                    <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] == $photo['user_id']): ?>
                         <?php if (empty($photo['public_token'])): ?>
                             <form method="POST" action="/photo/share">
                                 <input type="hidden" name="photo_id" value="<?= $photo['id'] ?>">
