@@ -68,6 +68,7 @@
         </div>
     </div>
     <script src="../../src/js/popup.js"></script>
+    <script src="../../src/js/darkMode.js"></script>
 
 </body>
 

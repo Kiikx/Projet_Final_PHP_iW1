@@ -33,48 +33,34 @@
 			}
 		}
 
-		// Variables spécifiques au thème clair
-		--bg-color: #{v.$bg-light};
-		--text-color: #{v.$text-light};
-	}
 
-	.dark-mode {
-		// Variables spécifiques au thème sombre
-		--bg-color: #{v.$bg-dark};
-		--text-color: #{v.$text-dark};
-	}
+		body {
+			font-family: fonts.$font1;
+			background-color: var(--bg-color);
+			color: var(--text-color);
+			min-height: 100vh;
+			overflow: hidden;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
 
-	body {
-		font-family: fonts.$font1;
-		background-color: var(--bg-color);
-		color: var(--text-color);
-		min-height: 100vh;
+		input {
+			border-radius: f.rem(6);
+			padding: f.rem(10) f.rem(16);
+			border: solid thin currentColor;
+		}
 
-		transition: background-color 0.3s ease, color 0.3s ease;
-	}
+		input {
+			font-family: inherit;
+			font-size: v.$font-size-base;
+		}
 
-	input {
-		border-radius: f.rem(6);
-		padding: f.rem(10) f.rem(16);
-		border: solid thin currentColor;
-	}
-<<<<<<< HEAD
+		a {
+			text-decoration: none;
+			color: v.$primary-color;
 
-	input {
-		font-family: inherit;
-		font-size: v.$font-size-base;
-	}
-	
-	a {
-		text-decoration: none;
-		color: v.$primary-color;
-	
-		&:hover {
-			text-decoration: underline;
+			&:hover {
+				text-decoration: underline;
+			}
 		}
 	}
-	
 }
-=======
-}
->>>>>>> 05df29e (dark mode : on progress)

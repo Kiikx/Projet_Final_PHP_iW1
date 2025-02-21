@@ -35,6 +35,8 @@
 
         <button type="submit" >Se connecter</button>
     </form>
-</body>
 
+    <script src="../../src/js/darkMode.js"></script>
+
+</body>
 </html>

@@ -9,6 +9,7 @@ require_once __DIR__ . "/controllers/ArticleController.php";
 require_once __DIR__ . "/controllers/UploadController.php";
 require_once __DIR__ . "/controllers/PasswordController.php";
 require_once __DIR__ . "/controllers/GroupController.php";
+// require_once __DIR__ . "/controllers/SettingsController.php";
 
 
 require_once __DIR__ . "/core/QueryBuilder.php";
@@ -56,6 +57,10 @@ $router->post("/group/change-role", GroupController::class, "changeRole");
 
 $router->get("/groups", GroupController::class, "index");
 $router->get("/group/{slug}", GroupController::class, "show");
+
+// SETTINGS
+// $router->get("/settings", SettingsController::class, "index");
+
 
 $router->start();
 
