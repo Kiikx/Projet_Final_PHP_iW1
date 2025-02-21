@@ -90,7 +90,7 @@ class PasswordController
                     // Supprimer le token après utilisation
                     $stmt = $pdo->prepare("DELETE FROM password_resets WHERE token = :token");
                     $stmt->execute(["token" => $request->token]);
-
+                    header("Location: /login");
                     echo "Mot de passe réinitialisé avec succès !";
                     return;
                 }

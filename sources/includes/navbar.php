@@ -20,6 +20,8 @@ function renderNavbar($pageTitle = "Tripipics") {
 
             <a href="/logout" class="navbar__logout">Déconnexion</a>
         <?php else: ?>
+            <a href="/register" class="navbar__login">Inscriptions</a>
+
             <a href="/login" class="navbar__login">Connexion</a>
         <?php endif; ?>
     </nav>
