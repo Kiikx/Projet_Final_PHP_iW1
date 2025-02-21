@@ -42,6 +42,8 @@
 
         <button type="submit">S'inscrire</button>
     </form>
+
+    <script src="../../src/js/darkMode.js"></script>
 </body>
 
 </html>

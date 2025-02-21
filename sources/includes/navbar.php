@@ -19,9 +19,15 @@ function renderNavbar($pageTitle = "Tripipics") {
             <a href="/groups" class="navbar__logout">Mes Groupes</a>
 
             <a href="/logout" class="navbar__logout">Déconnexion</a>
+
+            <a href="#" class="navbar__darkmode">🌙</a>
+            
         <?php else: ?>
             <a href="/register" class="navbar__login">Inscriptions</a>
             <a href="/login" class="navbar__login">Connexion</a>
+
+            <a href="#" class="navbar__darkmode">🌙</a>
+
         <?php endif; ?>
     </nav>
 </header>

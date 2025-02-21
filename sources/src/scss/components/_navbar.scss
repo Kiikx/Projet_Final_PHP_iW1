@@ -2,6 +2,7 @@
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
 @use "sass:map";
+
 .navbar {
     background: $primary-color;
     padding: 1rem;
@@ -11,6 +12,7 @@
     width: 100%;
     box-shadow: $box-shadow;
     position: relative;
+    z-index: 2;
 
     &__logo {
         font-size: 1.5rem;
@@ -34,7 +36,7 @@
             }
         }
 
-        p{
+        p {
             margin: 0;
             color: white;
             text-decoration: none;
@@ -51,26 +53,28 @@
         display: none;
     }
 
-    @media (max-width: map.get($breakpoints,md)) {
-        &__toggle {
-            display: block;
-        }
+    @media (max-width: map-get($breakpoints, md)) {
+        @media (max-width: map.get($breakpoints, md)) {
+            &__toggle {
+                display: block;
+            }
 
-        &__links {
-            display: none;
-            flex-direction: column;
-            position: absolute;
-            top: 4rem;
-            left: 0;
-            width: 100%;
-            background: $primary-color;
-            padding: 1rem 0;
-            box-shadow: $box-shadow;
-            text-align: center;
-        }
+            &__links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 4rem;
+                left: 0;
+                width: 100%;
+                background: $primary-color;
+                padding: 1rem 0;
+                box-shadow: $box-shadow;
+                text-align: center;
+            }
 
-        &__links--active {
-            display: flex;
+            &__links--active {
+                display: flex;
+            }
         }
     }
 }

@@ -33,47 +33,40 @@
 			}
 		}
 
-		// Variables spécifiques au thème clair
-		--bg-color: #{v.$bg-light};
-		--text-color: #{v.$text-light};
-	}
+		body {
+			font-family: fonts.$font1;
+			background-color: var(--bg-color);
+			color: var(--text-color);
+			min-height: 100vh;
+			overflow: hidden;
+			transition: background-color 0.3s ease, color 0.3s ease;
+		}
 
-	.dark-mode {
-		// Variables spécifiques au thème sombre
-		--bg-color: #{v.$bg-dark};
-		--text-color: #{v.$text-dark};
-	}
+		input {
+			border-radius: f.rem(6);
+			padding: f.rem(10) f.rem(16);
+			border: solid thin currentColor;
+			font-family: inherit;
+			font-size: v.$font-size-base;
+		}
 
-	body {
-		font-family: fonts.$font1;
-		background-color: var(--bg-color);
-		color: var(--text-color);
-		min-height: 100vh;
+		a {
+			text-decoration: none;
+			color: v.$primary-color;
 
-		transition: background-color 0.3s ease, color 0.3s ease;
-	}
+			&:hover {
+				text-decoration: underline;
+			}
 
-	input {
-		border-radius: f.rem(6);
-		padding: f.rem(10) f.rem(16);
-		border: solid thin currentColor;
-	}
+			// Variables spécifiques au thème clair
+			--bg-color: #{v.$bg-light};
+			--text-color: #{v.$text-light};
+		}
 
-}
-
-
-	input {
-		font-family: inherit;
-		font-size: v.$font-size-base;
-	}
-	
-	a {
-		text-decoration: none;
-		color: v.$primary-color;
-	
-		&:hover {
-			text-decoration: underline;
+		.dark-mode {
+			// Variables spécifiques au thème sombre
+			--bg-color: #{v.$bg-dark};
+			--text-color: #{v.$text-dark};
 		}
 	}
-	
 }

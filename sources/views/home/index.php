@@ -26,6 +26,7 @@ renderNavbar();
 </section>
 
 
+    <script src="../../src/js/darkMode.js"></script>
 
 </body>
 
