@@ -85,20 +85,23 @@ class GroupController
 
         if (!$groupId || !Group::isOwner($_SESSION['user_id'], $groupId)) {
             header("Location: /groups");
+            error_log("❌ Vous n'êtes pas autorisé à modifier ce groupe.");
             return;
         }
 
         $newName = trim($_POST['group_name'] ?? '');
         if (empty($newName)) {
             header("Location: /groups");
+            error_log("❌ Nom du groupe vide.");
             return;
         }
 
         if (Group::updateName($groupId, $newName)) {
             header("Location: /groups");
-            echo "✅ Nom du groupe mis à jour.";
+            error_log("✅ Nom du groupe mis à jour.");
         } else {
             header("Location: /groups");
+            error_log("❌ Erreur lors de la mise à jour du nom du groupe.");
             return;
         }
     }

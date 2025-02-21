@@ -1,0 +1,85 @@
+@use '../partials/variables' as *;
+@use '../partials/mixins' as *;
+@use '../partials/functions' as f;
+@use "sass:color";
+
+.photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(f.rem(300), 1fr));
+    gap: f.rem(16);
+    padding: f.rem(16);
+    justify-content: center;
+    width: 100%;
+    max-width: f.rem(1200);
+    margin: 0 auto;
+
+    &__item {
+        position: relative;
+        overflow: hidden;
+        border-radius: $border-radius;
+        box-shadow: $box-shadow;
+        transition: transform 0.3s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: $border-radius;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: space-between;
+        padding: f.rem(8);
+        background: rgba(0, 0, 0, 0.7);
+        position: absolute;
+        bottom: f.rem(10);
+        width: 100%;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    &__item:hover &__actions, &__actions:hover {
+        opacity: 1;
+    }
+
+    &__button {
+        background: var(--primary-color);
+        color: white;
+        padding: f.rem(8) f.rem(14);
+        border-radius: $border-radius-small;
+        text-decoration: none;
+        transition: background 0.3s ease;
+        cursor: pointer;
+        border: none;
+        font-size: f.rem(14);
+
+        &:hover {
+            background: $secondary-color;
+        }
+    }
+
+    &__share-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: f.rem(8);
+        background: var(--background-light);
+        padding: f.rem(8);
+        border-radius: $border-radius-small;
+        box-shadow: 0 f.rem(2) f.rem(4) rgba(0, 0, 0, 0.1);
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: f.rem(14);
+            margin-bottom: f.rem(4);
+            font-weight: bold;
+        }
+    }
+}

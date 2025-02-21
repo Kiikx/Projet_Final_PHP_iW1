@@ -10,7 +10,6 @@ class UploadController
     }
     public static function post()
     {
-        session_start();
         
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['image'])) {
             header("Location: /groups");
@@ -88,7 +87,6 @@ class UploadController
 
     public static function deletePhoto()
     {
-        session_start();
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             header("Location: /groups");
             return;
@@ -146,7 +144,6 @@ class UploadController
 
     public static function sharePhoto()
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             return;
@@ -175,14 +172,13 @@ class UploadController
         }
 
         $token = Photo::generatePublicToken($photoId);
+        header("Location: /group/{$photo['group_id']}");
 
-        header("Location: /groups");
         return;
     }
 
     public static function unsharePhoto()
     {
-        session_start();
         if (!isset($_SESSION['user_id'])) {
             header("Location: /login");
             return;
@@ -206,8 +202,8 @@ class UploadController
         }
 
         Photo::removePublicToken($photoId);
+        header("Location: /group/{$photo['group_id']}");
 
-        header("Location: /groups");
         return;
     }
 }
