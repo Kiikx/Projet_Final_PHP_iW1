@@ -17,28 +17,38 @@
 	cursor: pointer;
 }
 
-@mixin flexbox(
-	$direction: null,
+@mixin flexbox($direction: null,
 	$justify: null,
 	$align: null,
 	$gap: null,
-	$wrap: null
-) {
+	$wrap: null) {
 	display: flex;
-	@if ($direction != null) {
+
+	@if ($direction !=null) {
 		flex-direction: $direction;
 	}
-	@if ($justify != null) {
+
+	@if ($justify !=null) {
 		justify-content: $justify;
 	}
-	@if ($align != null) {
+
+	@if ($align !=null) {
 		align-items: $align;
 	}
-	@if ($gap != null) {
+
+	@if ($gap !=null) {
 		gap: $gap;
 	}
-	@if ($wrap != null) {
+
+	@if ($wrap !=null) {
 		flex-wrap: $wrap;
+	}
+}
+
+// Dark mode
+@mixin dark {
+	.dark & {
+		@content;
 	}
 }
 

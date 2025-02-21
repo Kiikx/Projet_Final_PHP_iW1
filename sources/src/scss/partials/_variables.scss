@@ -40,6 +40,7 @@ $colors: (
 	"purple": #c026d3,
 	"yellow": #f7f023,
 	"green": #09cb2c,
+	"light-green": #9ce0a8,
 	"primary": #0d6efd,
 	"secondary": #6c757d,
 	"accent": #dc3545,
@@ -47,6 +48,13 @@ $colors: (
 	"shadow-color": rgba(0, 0, 0, 0.1),
 	"neutral": #f8f9fa,
 );
+
+// Theme colors
+$bg-light: #f9fafb;
+$bg-dark: #111827;
+$text-light: #1f2937;
+$text-dark: #f9fafb;
+
 
 $shades: (
 	950: 8%,
