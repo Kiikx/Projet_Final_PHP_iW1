@@ -1,7 +1,8 @@
 @use '../partials/variables' as *;
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
-
+@use "sass:map";
+@use "sass:color";
 .banner {
     width: 100%;
     height: 100vh; // Plein écran
@@ -45,11 +46,11 @@
         transition: background 0.3s ease-in-out;
 
         &:hover {
-            background: darken($primary-color, 10%);
+            background: color.adjust($primary-color, $lightness: -10%)
         }
     }
 
-    @media (max-width: map-get($breakpoints,md)) {
+    @media (max-width: map.get($breakpoints,md)) {
         &__title {
             font-size: 1.5rem;
         }

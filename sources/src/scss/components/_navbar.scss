@@ -1,7 +1,7 @@
 @use '../partials/variables' as *;
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
-
+@use "sass:map";
 .navbar {
     background: $primary-color;
     padding: 1rem;
@@ -51,7 +51,7 @@
         display: none;
     }
 
-    @media (max-width: map-get($breakpoints,md)) {
+    @media (max-width: map.get($breakpoints,md)) {
         &__toggle {
             display: block;
         }

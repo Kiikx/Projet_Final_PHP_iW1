@@ -1,6 +1,7 @@
 @use '../partials/variables' as *;
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
+@use "sass:color";
 
 
 .group-list {
@@ -79,7 +80,8 @@
             border: none;
 
             &:hover {
-                background: darken($secondary-color, 10%);
+                background: color.adjust($secondary-color, $lightness: -10%)
+
             }
         }
 
