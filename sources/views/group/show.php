@@ -94,7 +94,7 @@
             });
         </script>
 
-        <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || GroupMember::getRole($_SESSION['user_id'], $group['id']) === 'write'): ?>
+        <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || GroupMember::getRole($_SESSION['user_id'], $group['id']) == 'write'): ?>
             <section class="container">
                 <h2 class="title">Uploader une PIPIcs</h2>
                 <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data" class="drag-uploader">
@@ -147,13 +147,13 @@
                         <div class="photo-gallery__item">
                             <img src="/uploads/group_<?= $group['id']; ?>/<?= $photo['filename']; ?>" alt="Photo">
                             <div class="photo-gallery__actions">
-                                <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] === $photo['user_id']): ?>
+                                <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] == $photo['user_id']): ?>
                                     <form method="POST" action="/photo/delete">
                                         <input type="hidden" name="photo_id" value="<?= $photo['id'] ?>">
                                         <button type="submit" class="photo-gallery__button">❌ Supprimer</button>
                                     </form>
                                 <?php endif; ?>
-                                <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] === $photo['user_id']): ?>
+                                <?php if (Group::isOwner($_SESSION['user_id'], $group['id']) || $_SESSION['user_id'] == $photo['user_id']): ?>
                                     <?php if (empty($photo['public_token'])): ?>
                                         <form method="POST" action="/photo/share">
                                             <input type="hidden" name="photo_id" value="<?= $photo['id'] ?>">
