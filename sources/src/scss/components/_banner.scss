@@ -1,6 +1,8 @@
 @use '../partials/variables' as *;
 @use '../partials/mixins' as *;
 @use '../partials/functions' as f;
+@use "sass:map";
+@use "sass:color";
 
 .banner {
     width: 100%;
@@ -43,30 +45,32 @@
         transition: background 0.3s ease-in-out;
 
         &:hover {
-            background: darken($primary-color, 10%);
+            background: color.adjust($primary-color, $lightness: -10%)
         }
     }
 
     @media (max-width: map-get($breakpoints, md)) {
-        &__title {
-            font-size: 1.5rem;
-        }
+        @media (max-width: map.get($breakpoints, md)) {
+            &__title {
+                font-size: 1.5rem;
+            }
 
-        &__subtitle {
-            font-size: 1rem;
+            &__subtitle {
+                font-size: 1rem;
+            }
         }
     }
-}
 
-// Animation légère pour un effet d'apparition
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(f.rem(20));
-    }
+    // Animation légère pour un effet d'apparition
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(f.rem(20));
+        }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 }

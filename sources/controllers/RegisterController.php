@@ -28,6 +28,7 @@ class RegisterController
             'password' => password_hash($request->password, PASSWORD_DEFAULT),
         ]);
 
-        echo "Inscription réussie !";
+        header("Location: /login");
+        return;
     }
 }

@@ -13,8 +13,8 @@
     <?php
     include_once "includes/navbar.php";
     renderNavbar();
-    ?>
 
+    ?>
     <h2 class="text-center">Mes Groupes</h2>
 
     <section class="group-list">
@@ -50,7 +50,7 @@
     <form class="form" method="POST" action="/group/create">
         <label>Nom du groupe :</label>
         <div class="form__input-wrapper">
-            <input type="text" name="name" placeholder="Nom du groupe">
+            <input type="text" name="name" placeholder="Nom du groupe" required>
         </div>
         <button type="submit">Créer</button>
     </form>

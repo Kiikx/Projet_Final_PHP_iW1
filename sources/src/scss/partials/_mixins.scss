@@ -46,6 +46,13 @@
 	}
 }
 
+// Dark mode
+@mixin dark {
+	.dark & {
+		@content;
+	}
+}
+
 @mixin button-style($bg-color, $hover-color) {
 	background: $bg-color;
 	color: white;

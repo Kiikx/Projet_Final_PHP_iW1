@@ -4,13 +4,14 @@
 
 <body>
 <html>
-    <div class="container-upload">
         <h2 class="title">Publiez votre PIPIcs</h2>
         <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data" class="drag-uploader">
             <label for="group_id">ID du groupe :</label>
             <input type="number" id="group_id" name="group_id" required>
             
             <br><br>
+<body>
+<html>
 
             <div class="drag-uploader__drop-area" id="drop-area">
                 <p>Glissez & déposez votre image ici ou 

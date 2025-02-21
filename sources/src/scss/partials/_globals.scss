@@ -33,7 +33,6 @@
 			}
 		}
 
-
 		body {
 			font-family: fonts.$font1;
 			background-color: var(--bg-color);
@@ -47,9 +46,6 @@
 			border-radius: f.rem(6);
 			padding: f.rem(10) f.rem(16);
 			border: solid thin currentColor;
-		}
-
-		input {
 			font-family: inherit;
 			font-size: v.$font-size-base;
 		}
@@ -61,6 +57,16 @@
 			&:hover {
 				text-decoration: underline;
 			}
+
+			// Variables spécifiques au thème clair
+			--bg-color: #{v.$bg-light};
+			--text-color: #{v.$text-light};
+		}
+
+		.dark-mode {
+			// Variables spécifiques au thème sombre
+			--bg-color: #{v.$bg-dark};
+			--text-color: #{v.$text-dark};
 		}
 	}
 }

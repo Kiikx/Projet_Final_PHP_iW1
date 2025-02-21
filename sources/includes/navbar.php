@@ -23,6 +23,7 @@ function renderNavbar($pageTitle = "Tripipics") {
             <a href="#" class="navbar__darkmode">🌙</a>
             
         <?php else: ?>
+            <a href="/register" class="navbar__login">Inscriptions</a>
             <a href="/login" class="navbar__login">Connexion</a>
 
             <a href="#" class="navbar__darkmode">🌙</a>
